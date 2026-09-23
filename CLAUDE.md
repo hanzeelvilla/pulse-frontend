@@ -6,7 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Pulse Frontend is a web interface for controlling a MAX7219 LED matrix display over the network: connecting to the device and switching between screens (plain text, Spotify now-playing, clock, timer/stopwatch, payday countdown, GitHub contributions, etc.). The matching firmware/hardware lives in a separate repo: https://github.com/hanzeelvilla/pulse.
 
-The codebase is currently a fresh scaffold (React root in `src/main.tsx`, placeholder `src/App.tsx`) — the screens/connectivity features described above are not yet implemented.
+The overall project is split into 3 projects: frontend (this repo), backend, and hardware. Work follows a shared roadmap located at `D:\Hanzeel\arduinoProjects\pulse\ROADMAP.md` — consult it to know what to build and in what order.
+
+Current state (Roadmap Phase 5): a single-page vertical slice in `src/App.tsx` — a free-text form (react-hook-form + zod) that emits `set-free-text` to the backend and mirrors the last `display-text` event. Screen switching and the other screens are not yet implemented.
+
+Backend contract: Socket.IO namespace `/frontend` (`socket.io-client`). Client → server `set-free-text` (plain string); server → client `display-text` (plain string), sent on connect and broadcast to every frontend on each change. The backend has no CORS config, so `vite.config.ts` proxies `/socket.io` to `http://localhost:3000` in dev and the client connects same-origin.
 
 ## Language
 
