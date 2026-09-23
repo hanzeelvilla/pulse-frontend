@@ -10,4 +10,11 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
   ],
+  server: {
+    // The backend has no CORS config, so proxy Socket.IO through the dev server.
+    // ponytail: hardcoded backend URL, move to an env var in Phase 10 (deployment)
+    proxy: {
+      "/socket.io": { target: "http://localhost:3000", ws: true },
+    },
+  },
 });
